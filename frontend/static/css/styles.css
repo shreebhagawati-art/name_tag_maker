@@ -1,1 +1,86 @@
+/* Custom styles for Food Name Tag Maker */
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Template Card Styling */
+.template-card {
+    border-color: #e7e5e4;
+    background-color: #ffffff;
+}
+
+.template-card:hover {
+    border-color: #d4a159;
+    box-shadow: 0 4px 14px rgba(212, 161, 89, 0.12);
+}
+
+.template-card.active {
+    border-color: #c88636;
+    background-color: #fbf8f1;
+    box-shadow: 0 0 0 3px rgba(200, 134, 54, 0.15), 0 4px 16px rgba(200, 134, 54, 0.12);
+}
+
+.template-card.active .check-icon {
+    display: flex !important;
+}
+
+/* Food Item Row */
+.food-item-row {
+    transition: all 0.2s ease;
+}
+
+.food-item-row:hover {
+    background-color: #fafaf9;
+}
+
+.food-item-row:focus-within {
+    border-color: #d4a159;
+    box-shadow: 0 0 0 2px rgba(212, 161, 89, 0.2);
+}
+
+/* Preset Quantity Pills */
+.preset-btn {
+    transition: all 0.15s ease;
+}
+
+.preset-btn:hover {
+    background-color: #f5eedc;
+    color: #754323;
+    border-color: #d4a159;
+}
+
+.preset-btn.active {
+    background-color: #422307;
+    color: #ffffff;
+    border-color: #422307;
+}
+
+/* Quantity input spin button styling */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    opacity: 0.6;
+}
+
+/* Custom Toast Notification */
+.toast {
+    pointer-events: auto;
+    animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transition: all 0.3s ease;
+}
+
+.toast.removing {
+    opacity: 0;
+    transform: translateY(-8px);
+}
