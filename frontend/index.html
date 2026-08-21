@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Name Tag Maker — Shree Bhagwati Caterers</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/static/images/logo.png">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#fbf8f1',
+                            100: '#f5eedc',
+                            200: '#edd9b5',
+                            300: '#e1be87',
+                            400: '#d4a159',
+                            500: '#c88636',
+                            600: '#b26e2a',
+                            700: '#915324',
+                            800: '#754323',
+                            900: '#613820',
+                        },
+                        maroon: {
+                            900: '#422307',
+                            950: '#2c1503',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Fraunces', 'Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts: Fraunces & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-100 selection:text-amber-900">
+
+    <!-- Top Announcement / Catering Bar -->
+    <div class="bg-gradient-to-r from-stone-900 via-maroon-950 to-stone-900 text-gold-200 text-xs py-2 px-4 text-center tracking-wider border-b border-gold-900/30 flex items-center justify-center gap-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="font-medium uppercase tracking-widest text-[11px]">Shree Bhagwati Caterers • Print-Ready 6 × 4 Inch Master PDF Generator • 300 DPI</span>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-stone-200 sticky top-0 z-40 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="h-13 flex items-center justify-center py-1">
+                    <img src="/static/images/logo.png" alt="Shree Bhagwati Caterers Logo" class="h-12 sm:h-14 w-auto object-contain transition-transform hover:scale-105">
+                </div>
+                <div class="border-l border-stone-200 pl-4">
+                    <h1 class="text-xl sm:text-2xl font-serif font-bold text-stone-900 tracking-tight flex items-center gap-2">
+                        FOOD NAME TAG MAKER
+                        <span class="text-[10px] font-sans font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full bg-gold-100 text-gold-800 border border-gold-200">Pro</span>
+                    </h1>
+                    <p class="text-xs sm:text-sm text-stone-500 font-medium">Create professional food name tags in seconds</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button id="btn-quick-samples" class="hidden sm:flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-lg text-stone-600 bg-stone-100 hover:bg-stone-200 transition">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-gold-600"></i>
+                    Sample Menu
+                </button>
+                <button id="btn-header-reset" class="flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-lg text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition">
+                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                    Reset
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Progress / Counter Pill Bar -->
+        <div class="mb-8 bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-stone-200 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4 w-full md:w-auto">
+                <div class="w-12 h-12 rounded-xl bg-gold-50 border border-gold-200 flex items-center justify-center text-gold-700 font-serif text-lg font-bold">
+                    <span id="counter-total-badge">0</span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-bold text-stone-900" id="counter-status-text">0 / 100 Tags</span>
+                        <span id="counter-badge" class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-stone-100 text-stone-600">Ready</span>
+                    </div>
+                    <p class="text-xs text-stone-500">Maximum 100 name-tag pages per generation</p>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full md:w-72 flex flex-col gap-1.5">
+                <div class="flex justify-between text-[11px] font-semibold text-stone-500">
+                    <span>Capacity</span>
+                    <span id="progress-percentage">0%</span>
+                </div>
+                <div class="w-full h-3 bg-stone-100 rounded-full overflow-hidden p-0.5 border border-stone-200">
+                    <div id="progress-bar-fill" class="h-full bg-gradient-to-r from-gold-400 to-gold-600 rounded-full transition-all duration-300 w-0"></div>
+                </div>
+            </div>
+
+            <!-- Quick Fill Action -->
+            <div class="flex items-center gap-2 w-full md:w-auto justify-end">
+                <button id="btn-fill-100" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition flex items-center gap-1">
+                    <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+                    Make 100 Tags of Dish #1
+                </button>
+            </div>
+        </div>
+
+        <!-- 2-Column Grid Layout: Generator Form (Left) & Live Preview / Output (Right) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT COLUMN: Generator Controls (7 cols) -->
+            <div class="lg:col-span-7 flex flex-col gap-6">
+
+                <!-- STEP 1: SELECT TEMPLATE -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-stone-900 text-white text-xs font-bold flex items-center justify-center">1</span>
+                            <h2 class="text-base font-bold text-stone-900 uppercase tracking-wide">Select Template</h2>
+                        </div>
+                        <span class="text-xs text-stone-400 font-medium">Original Master Designs</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- DAY CARD -->
+                        <button type="button" id="card-template-day" class="template-card active relative p-4 rounded-xl border-2 text-left transition-all duration-200 flex flex-col gap-3 group">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2 text-amber-600 font-bold text-sm">
+                                    <span class="text-xl">☀️</span>
+                                    <span>DAY FOOD</span>
+                                </div>
+                                <span class="check-icon w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs shadow-sm">
+                                    <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                                </span>
+                            </div>
+                            <div class="text-xs text-stone-500 leading-relaxed">
+                                Warm cream-tinted floral master template designed for afternoon banquets & celebrations.
+                            </div>
+                            <div class="mt-auto pt-2 border-t border-stone-100 flex items-center justify-between text-[11px] font-medium text-stone-400">
+                                <span>Day-food.pdf</span>
+                                <span class="text-amber-700 font-semibold">6 × 4 in</span>
+                            </div>
+                        </button>
+
+                        <!-- NIGHT CARD -->
+                        <button type="button" id="card-template-night" class="template-card relative p-4 rounded-xl border-2 text-left transition-all duration-200 flex flex-col gap-3 group">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2 text-indigo-700 font-bold text-sm">
+                                    <span class="text-xl">🌙</span>
+                                    <span>NIGHT FOOD</span>
+                                </div>
+                                <span class="check-icon hidden w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs shadow-sm">
+                                    <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                                </span>
+                            </div>
+                            <div class="text-xs text-stone-500 leading-relaxed">
+                                Crisp white & champagne floral master template for evening receptions & dinner galas.
+                            </div>
+                            <div class="mt-auto pt-2 border-t border-stone-100 flex items-center justify-between text-[11px] font-medium text-stone-400">
+                                <span>Night-food.pdf</span>
+                                <span class="text-indigo-700 font-semibold">6 × 4 in</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: FOOD NAMES & QUANTITIES -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-stone-900 text-white text-xs font-bold flex items-center justify-center">2</span>
+                            <h2 class="text-base font-bold text-stone-900 uppercase tracking-wide">Food / Dish Names</h2>
+                        </div>
+                        
+                        <!-- Mode Tabs: List View vs Bulk Paste -->
+                        <div class="flex items-center bg-stone-100 p-1 rounded-xl border border-stone-200 text-xs font-semibold">
+                            <button type="button" id="tab-mode-list" class="mode-tab active px-3 py-1.5 rounded-lg text-stone-900 bg-white shadow-2xs transition">
+                                ✍️ Dish Table
+                            </button>
+                            <button type="button" id="tab-mode-bulk" class="mode-tab px-3 py-1.5 rounded-lg text-stone-500 hover:text-stone-900 transition flex items-center gap-1.5">
+                                📋 Paste Food List <span class="text-[10px] bg-amber-200 text-amber-900 px-1.5 py-0.2 rounded font-bold">1 Tag Each</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- VIEW A: DISH LIST TABLE -->
+                    <div id="view-dish-list">
+                        <!-- Quick actions bar -->
+                        <div class="flex items-center justify-between mb-3 text-xs text-stone-500">
+                            <span id="items-count-label" class="font-medium">1 item</span>
+                            <div class="flex items-center gap-2">
+                                <button type="button" id="btn-set-all-one" class="text-xs font-semibold text-gold-700 hover:text-gold-900 hover:underline flex items-center gap-1">
+                                    <i data-lucide="hash" class="w-3.5 h-3.5"></i>
+                                    Set All to 1 Tag Each
+                                </button>
+                                <span class="text-stone-300">|</span>
+                                <button type="button" id="btn-clear-all-dishes" class="text-xs font-semibold text-rose-600 hover:text-rose-800 hover:underline">
+                                    Clear All
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Items Container -->
+                        <div id="food-items-list" class="space-y-3.5 mb-5">
+                            <!-- Dynamic items rendered via JavaScript -->
+                        </div>
+
+                        <!-- Add Food & Preset Controls -->
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-stone-100">
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <button type="button" id="btn-add-food" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white text-sm font-semibold shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <i data-lucide="plus" class="w-4 h-4 text-gold-400"></i>
+                                    <span>+ Add Food</span>
+                                </button>
+                                <button type="button" id="btn-open-bulk-modal" class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-gold-100 hover:bg-gold-200 text-gold-900 text-xs font-bold border border-gold-300 shadow-2xs transition">
+                                    <i data-lucide="clipboard-list" class="w-4 h-4 text-gold-700"></i>
+                                    <span>Paste Food List</span>
+                                </button>
+                            </div>
+
+                            <!-- Quick dish suggestions pills -->
+                            <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 text-xs text-stone-500">
+                                <span class="font-medium text-[11px] uppercase tracking-wider text-stone-400 mr-1">Quick:</span>
+                                <button type="button" class="quick-dish-chip px-2.5 py-1 rounded-md bg-stone-100 hover:bg-gold-100 hover:text-gold-900 transition">Dal Makhani</button>
+                                <button type="button" class="quick-dish-chip px-2.5 py-1 rounded-md bg-stone-100 hover:bg-gold-100 hover:text-gold-900 transition">Jeera Rice</button>
+                                <button type="button" class="quick-dish-chip px-2.5 py-1 rounded-md bg-stone-100 hover:bg-gold-100 hover:text-gold-900 transition">Gulab Jamun</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- VIEW B: BULK FOOD LIST PASTE PANEL -->
+                    <div id="view-bulk-paste" class="hidden animate-fade-in">
+                        <div class="bg-gold-50/60 border border-gold-200 rounded-xl p-4 mb-4">
+                            <div class="flex items-start gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-gold-500 text-white flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+                                    <i data-lucide="list-plus" class="w-4.5 h-4.5"></i>
+                                </div>
+                                <div class="text-xs">
+                                    <h4 class="font-bold text-stone-900">Paste Full Food / Dish List (1 Tag for Each Dish)</h4>
+                                    <p class="text-stone-600 mt-0.5 leading-relaxed">
+                                        Paste your complete menu from WhatsApp, Excel, Word or notes. Each line will create <strong>1 single name tag</strong> in the output PDF.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Textarea -->
+                        <div class="relative mb-3">
+                            <textarea id="bulk-food-input" rows="8" class="w-full bg-white border border-stone-300 rounded-xl p-4 text-sm font-medium text-stone-900 placeholder-stone-400 focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 shadow-inner resize-y font-mono leading-relaxed" placeholder="Paste dishes here, one per line:&#10;1. Paneer Butter Masala&#10;2. Dal Makhani&#10;3. Shahi Paneer&#10;4. Mix Vegetable Curry&#10;5. Jeera Rice&#10;6. Gulab Jamun&#10;7. Hyderabadi Veg Biryani&#10;8. Chole Masala"></textarea>
+                        </div>
+
+                        <!-- Controls below textarea -->
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 mb-4 text-xs">
+                            <div class="flex items-center gap-3">
+                                <div class="flex items-center gap-1.5 text-stone-700 font-semibold bg-stone-100 px-3 py-1.5 rounded-lg border border-stone-200">
+                                    <span>Quantity per dish:</span>
+                                    <input type="number" id="bulk-default-qty" min="1" max="100" value="1" class="w-12 text-center bg-white border border-stone-300 rounded px-1 py-0.5 font-bold text-stone-900 focus:outline-none">
+                                    <span class="text-stone-500 text-[11px] font-normal">(Default: 1 tag each)</span>
+                                </div>
+                                <span id="bulk-detected-count" class="font-bold text-gold-800 bg-gold-100 px-2.5 py-1.5 rounded-lg border border-gold-200">
+                                    0 Dishes Detected
+                                </span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <button type="button" id="btn-load-sample-20" class="text-xs font-semibold text-stone-600 hover:text-stone-900 hover:underline">
+                                    Load Sample 10 Dishes
+                                </button>
+                                <span class="text-stone-300">•</span>
+                                <button type="button" id="btn-bulk-clear" class="text-xs font-semibold text-rose-600 hover:text-rose-800 hover:underline">
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex items-center gap-3 pt-3 border-t border-stone-100">
+                            <button type="button" id="btn-apply-bulk-list" class="flex-1 py-3 px-5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2">
+                                <i data-lucide="sparkles" class="w-4 h-4 text-gold-400"></i>
+                                <span>Create 1 Single Tag for Each Dish</span>
+                            </button>
+                            <button type="button" id="btn-cancel-bulk" class="py-3 px-4 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-semibold transition">
+                                Back to Table
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: GENERATION SUMMARY & CTA -->
+                <div class="bg-gradient-to-br from-stone-900 via-stone-950 to-maroon-950 text-white rounded-2xl p-6 shadow-xl border border-stone-800">
+                    <div class="flex items-center justify-between mb-5 border-b border-stone-800 pb-4">
+                        <div>
+                            <h3 class="text-base font-serif font-bold text-gold-200">Production Summary</h3>
+                            <p class="text-xs text-stone-400">Review print configuration before building PDF</p>
+                        </div>
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-gold-500/20 text-gold-300 border border-gold-500/30">Ready to Print</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+                            <div class="text-[11px] text-stone-400 uppercase font-semibold">Template</div>
+                            <div class="text-sm font-bold text-gold-300 mt-0.5" id="summary-template">Day Food</div>
+                        </div>
+                        <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+                            <div class="text-[11px] text-stone-400 uppercase font-semibold">Food Items</div>
+                            <div class="text-sm font-bold text-white mt-0.5" id="summary-items">1 Dish</div>
+                        </div>
+                        <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+                            <div class="text-[11px] text-stone-400 uppercase font-semibold">Total Tags</div>
+                            <div class="text-sm font-bold text-gold-300 mt-0.5" id="summary-total-tags">100 Pages</div>
+                        </div>
+                        <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+                            <div class="text-[11px] text-stone-400 uppercase font-semibold">Page Size</div>
+                            <div class="text-sm font-bold text-white mt-0.5">6 × 4 Inches</div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row items-center gap-3">
+                        <button type="button" id="btn-generate-pdf" class="w-full sm:flex-1 py-3.5 px-6 rounded-xl bg-gradient-to-r from-gold-500 via-gold-400 to-gold-500 hover:from-gold-400 hover:to-gold-500 text-maroon-950 font-bold text-sm tracking-wide shadow-lg shadow-gold-500/25 transition-all duration-200 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i data-lucide="file-down" class="w-5 h-5 transition group-hover:scale-110"></i>
+                            <span id="btn-generate-text">GENERATE PDF</span>
+                        </button>
+                        
+                        <button type="button" id="btn-reset-main" class="w-full sm:w-auto py-3.5 px-5 rounded-xl bg-white/10 hover:bg-white/20 text-stone-300 text-sm font-semibold transition border border-white/10 flex items-center justify-center gap-1.5">
+                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                            <span>Reset</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: Live Interactive Preview (5 cols) -->
+            <div class="lg:col-span-5 flex flex-col gap-6 lg:sticky lg:top-28">
+                
+                <!-- PREVIEW CONTAINER -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="eye" class="w-5 h-5 text-gold-600"></i>
+                            <h2 class="text-base font-bold text-stone-900 uppercase tracking-wide">Live Tag Preview</h2>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-xs text-stone-500 font-medium">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span>Exact 6 × 4 Ratio</span>
+                        </div>
+                    </div>
+
+                    <!-- Carousel Navigator if multiple dishes -->
+                    <div id="preview-carousel-nav" class="hidden mb-3 bg-stone-50 rounded-xl p-2 border border-stone-200 flex items-center justify-between text-xs">
+                        <button type="button" id="btn-preview-prev" class="p-1 rounded-lg hover:bg-stone-200 text-stone-600 transition">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                        </button>
+                        <span id="preview-carousel-label" class="font-semibold text-stone-700">Dish 1 of 1: PANEER BUTTER MASALA</span>
+                        <button type="button" id="btn-preview-next" class="p-1 rounded-lg hover:bg-stone-200 text-stone-600 transition">
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <!-- 6x4 Tag Canvas Container -->
+                    <div class="relative w-full aspect-[6/4] bg-stone-100 rounded-xl overflow-hidden shadow-inner border border-stone-300 flex items-center justify-center group">
+                        <!-- Loading Spinner -->
+                        <div id="preview-loader" class="hidden absolute inset-0 bg-white/70 backdrop-blur-xs z-10 flex items-center justify-center">
+                            <div class="w-8 h-8 border-3 border-gold-500 border-t-transparent rounded-full animate-spin"></div>
+                        </div>
+
+                        <!-- Rendered Image -->
+                        <img id="preview-img" src="" alt="Food Tag Preview" class="w-full h-full object-cover select-none">
+                    </div>
+
+                    <!-- Preview Specs / Typography Info -->
+                    <div class="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-stone-400">Typography:</span>
+                            <span class="font-semibold text-stone-700" id="preview-font-info">Fraunces 25.1pt</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-stone-400">Layout:</span>
+                            <span class="font-semibold text-stone-700" id="preview-layout-info">Single Line</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DOWNLOAD SUCCESS BANNER (Shown after generation) -->
+                <div id="download-panel" class="hidden bg-emerald-50 border-2 border-emerald-500/30 rounded-2xl p-6 shadow-md animate-fade-in">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-md">
+                            <i data-lucide="check-check" class="w-5 h-5"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-base font-bold text-emerald-950" id="download-title">100 Name Tags Generated!</h3>
+                            <p class="text-xs text-emerald-800 mt-0.5" id="download-subtitle">Your print-ready multi-page 6 × 4 inch PDF is compiled.</p>
+                            
+                            <div class="mt-4 flex flex-col sm:flex-row items-center gap-2.5">
+                                <a id="btn-download-pdf" href="#" download class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-md shadow-emerald-600/20 transition">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    <span>DOWNLOAD PDF</span>
+                                </a>
+                                <button type="button" id="btn-download-new" class="w-full sm:w-auto text-xs font-semibold px-3.5 py-2.5 rounded-xl text-emerald-900 hover:bg-emerald-100 transition">
+                                    Create More
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-stone-200 py-6 mt-12 text-center text-xs text-stone-500">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+                <img src="/static/images/logo.png" alt="Shree Bhagwati Caterers Logo" class="h-6 w-auto object-contain">
+                <span class="font-serif font-bold text-stone-800">SHREE BHAGWATI CATERERS</span>
+                <span class="text-stone-300">|</span>
+                <span>Food Name Tag Maker</span>
+            </div>
+            <div class="text-stone-400">
+                Exact 6 × 4 Inch Dimensions • Master Template Preservation Engine
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Main JavaScript Application -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
